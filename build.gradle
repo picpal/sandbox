@@ -1,0 +1,126 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.2'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'jacoco'
+}
+
+group = 'com.picpal'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+jacoco {
+    toolVersion = "0.8.11"  // Jacoco 도구의 버전 지정 (최신 버전 사용)
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Spring Boot Starters
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // Spring Framework
+    implementation 'org.springframework.session:spring-session-core'
+    implementation 'org.springframework.data:spring-data-commons'
+
+    // Database
+    runtimeOnly 'com.h2database:h2'
+
+    // MyBatis
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+
+    // Development Tools
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    // Servlet API
+    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+
+    // Excel Handling
+    implementation 'org.apache.poi:poi:5.2.5'
+    implementation 'org.apache.poi:poi-ooxml:5.2.5'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    // JSON Processing
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+
+    // Scheduling
+    implementation 'org.quartz-scheduler:quartz:2.3.2'
+    implementation 'org.springframework.boot:spring-boot-starter-quartz'
+
+    // Security
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
+
+    // Testing
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
+    testImplementation 'org.mockito:mockito-core:4.11.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.11.0'
+
+    // HttpClient mocking
+    implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
+}
+
+// UTF-8 인코딩을 위한 compileJava 옵션 설정
+compileJava.options.encoding = 'UTF-8'
+
+// JavaCompile 타입의 모든 태스크에 대해 UTF-8 인코딩 적용
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+/*properties duplicate prevent*/
+tasks {
+    processResources {
+        duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
+    }
+}
+
+test {
+    finalizedBy jacocoTestReport  // 테스트 후 자동으로 Jacoco 리포트 생성
+    useJUnitPlatform()
+}
+
+jacocoTestReport {
+    dependsOn test  // 테스트 실행 후 리포트 생성
+    reports {
+        xml.required = true
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.0  // 최소 코드 커버리지
+            }
+        }
+    }
+}
+
