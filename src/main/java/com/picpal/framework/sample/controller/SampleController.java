@@ -19,6 +19,11 @@ public class SampleController {
     private final SampleService sampleService;
 
 
+    @GetMapping("/hello")
+    public String hello() {
+        return "hello";
+    }
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> selectUser(@PathVariable String userId) {
         log.info("[userId] : " + userId);

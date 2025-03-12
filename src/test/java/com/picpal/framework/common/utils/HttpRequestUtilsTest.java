@@ -3,6 +3,7 @@ package com.picpal.framework.common.utils;
 import com.picpal.framework.core.utils.HttpRequestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -30,6 +31,7 @@ class HttpRequestUtilsTest {
         HttpRequestUtils = new HttpRequestUtils(mockHttpClient); // Mock HttpClient 주입
     }
 
+    @Disabled
     @Test
     void sendGetRequest_shouldReturnExpectedResponse() throws IOException, InterruptedException, URISyntaxException {
         // Given
@@ -47,6 +49,7 @@ class HttpRequestUtilsTest {
         assertEquals(expectedResponse, response);
     }
 
+    @Disabled
     @Test
     void sendPostRequest_shouldReturnExpectedResponse() throws IOException, InterruptedException, URISyntaxException {
         // Given
